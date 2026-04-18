@@ -8,6 +8,7 @@ import random
 import datetime
 import json
 import sys
+import os
 
 # ============================================================
 # 八卦基础数据
@@ -590,6 +591,33 @@ def format_hexagram(result):
     return "\n".join(lines)
 
 # ============================================================
+# 保存记录
+# ============================================================
+def get_records_dir():
+    """获取 records 目录路径（脚本同级的 records/ 目录）"""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    # 如果在 scripts/ 子目录中，上一级就是项目根目录
+    if os.path.basename(script_dir) == 'scripts':
+        project_dir = os.path.dirname(script_dir)
+    else:
+        project_dir = script_dir
+    records_dir = os.path.join(project_dir, 'records')
+    os.makedirs(records_dir, exist_ok=True)
+    return records_dir
+
+def save_record(result):
+    """保存排盘结果到 records/ 目录"""
+    ts = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    question = result.get('问题', '').strip()
+    # 文件名: 时间_占事.json
+    safe_q = question[:20] if question else '无题'
+    filename = f"{ts}_{safe_q}.json"
+    filepath = os.path.join(get_records_dir(), filename)
+    with open(filepath, 'w', encoding='utf-8') as f:
+        json.dump(result, f, ensure_ascii=False, indent=2)
+    return filepath
+
+# ============================================================
 def main():
     import argparse
     parser = argparse.ArgumentParser(description='六爻纳甲占卜引擎')
@@ -597,6 +625,7 @@ def main():
     parser.add_argument('-c', '--coins', nargs=6, type=int, help='六爻值(6/7/8/9) 初爻在前')
     parser.add_argument('--json', action='store_true')
     parser.add_argument('--full', action='store_true', help='输出完整八步推导')
+    parser.add_argument('--no-save', action='store_true', help='不保存记录到 records/ 目录')
     parser.add_argument('--seed', type=int, default=None)
     parser.add_argument('--date', type=str, default=None)
     args = parser.parse_args()
@@ -614,6 +643,14 @@ def main():
         print(format_hexagram(result))
     else:
         print(format_hexagram_brief(result))
+
+    # 自动保存记录
+    if not args.no_save:
+        try:
+            filepath = save_record(result)
+            print(f"\n  [记录已保存: {filepath}]")
+        except Exception as e:
+            print(f"\n  [保存失败: {e}]")
 
 if __name__ == '__main__':
     main()
