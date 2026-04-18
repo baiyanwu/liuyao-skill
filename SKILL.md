@@ -133,19 +133,22 @@ triggers:
 
 ```bash
 # 随机起卦
-python3 ~/.hermes/skills/六爻占卜/scripts/liuyao.py -q "所问之事"
+python3 scripts/liuyao.py -q "所问之事"
 
 # 手动输入六爻值 (初爻在前, 6/7/8/9)
-python3 ~/.hermes/skills/六爻占卜/scripts/liuyao.py -q "测财运" -c 7 8 9 6 7 8
+python3 scripts/liuyao.py -q "测财运" -c 7 8 9 6 7 8
 
 # 指定日期
-python3 ~/.hermes/skills/六爻占卜/scripts/liuyao.py -q "测事业" --date 2026-04-18
+python3 scripts/liuyao.py -q "测事业" --date 2026-04-18
 
 # JSON输出
-python3 ~/.hermes/skills/六爻占卜/scripts/liuyao.py -q "测感情" --json
+python3 scripts/liuyao.py -q "测感情" --json
+
+# 完整八步推导
+python3 scripts/liuyao.py -q "测投资" --full
 
 # 可复现(指定种子)
-python3 ~/.hermes/skills/六爻占卜/scripts/liuyao.py --seed 42 -q "测试"
+python3 scripts/liuyao.py --seed 42 -q "测试"
 ```
 
 ### Agent 调用流程（核心规则）
@@ -221,23 +224,3 @@ python3 ~/.hermes/skills/六爻占卜/scripts/liuyao.py --seed 42 -q "测试"
 规律：外卦地支 = 内卦地支向前偏移4位（在12地支循环中）。
 
 **代码中必须用 `NAYUE_DIZHI_INNER` 和 `NAYUE_DIZHI_OUTER` 两套表**，不能用一套六位的数组然后 `i%3` 循环。
-
-### agent-browser 参数修正
-
-用户说"用 agent-browser --head --persistent"，实际正确参数是：
-- `--headed`（不是 `--head`）— 显示浏览器窗口
-- `--profile <path>`（不是 `--persistent`）— 持久化配置文件
-
-### 输出格式要求
-
-用户期望看到**完整的传统六爻流程推导**，不是精简汇总。排盘输出必须包含：
-1. 每掷的爻值和阴阳属性（老阴/少阳/少阴/老阳）
-2. 上下卦推导（二进制→八卦名→六十四卦名）
-3. 每爻的纳甲过程（内卦/外卦→天干地支→五行）
-4. 每爻的六亲推导（五行生克关系）
-5. 六神排列（日干起例）
-6. 世应定位（卦型决定）
-7. 空亡月破检查
-8. 变卦（动爻变化后的完整卦象）
-
-格式已写入 `liuyao.py` 的 `format_hexagram()` 函数中。
