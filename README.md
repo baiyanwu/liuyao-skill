@@ -87,7 +87,21 @@ python3 scripts/liuyao.py --seed 42 -q "测试"
 | 艮 | 辰、午、申 | 戌、子、寅 |
 | 兑 | 巳、卯、丑 | 亥、酉、未 |
 
-## 输出模式
+### 输出模式
+
+### 记录保存
+
+每次起卦自动保存 JSON 到 `records/` 目录，文件名格式：`时间戳_占事.json`
+
+```bash
+# 跳过保存
+python3 scripts/liuyao.py -q "测试" --no-save
+
+# 查看历史记录
+ls records/
+```
+
+`records/` 目录已在 `.gitignore` 中排除，不会提交到 git。
 
 ### 简略模式（默认）
 排盘汇总表 + 世应 + 空亡月破 + 动爻。适合快速起卦后进入断卦环节。
