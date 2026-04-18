@@ -54,15 +54,15 @@ python3 scripts/liuyao.py --seed 42 -q "测试"
 | 9 | 老阳 | 阳动爻（阳→阴变）|
 | 6 | 老阴 | 阴动爻（阴→阳变）|
 
-### 作为 Hermes Agent Skill
+### 集成到 AI Agent（可选）
 
-将整个目录复制到 `~/.hermes/skills/六爻占卜/` 即可自动注册。
+本项目兼容 [Hermes Agent](https://github.com/openclaw/hermes-agent) 的 Skill 体系。将整个目录复制到 `~/.hermes/skills/六爻占卜/` 即可自动注册。
 
 ```
 ~/.hermes/skills/六爻占卜/
-├── SKILL.md           # 技能定义文件
+├── SKILL.md
 └── scripts/
-    └── liuyao.py      # 核心引擎
+    └── liuyao.py
 ```
 
 ## 纳甲口诀
@@ -89,6 +89,10 @@ python3 scripts/liuyao.py --seed 42 -q "测试"
 
 ### 输出模式
 
+**简略模式（默认）：** 排盘汇总表 + 世应 + 空亡月破 + 动爻。适合快速起卦后进入断卦环节。
+
+**完整模式（--full）：** 展示完整的八步推导过程：起卦→定卦→纳甲→六亲→六神→世应→空亡月破→变卦。适合学习和验证。
+
 ### 记录保存
 
 每次起卦自动保存 JSON 到 `records/` 目录，文件名格式：`时间戳_占事.json`
@@ -102,12 +106,6 @@ ls records/
 ```
 
 `records/` 目录已在 `.gitignore` 中排除，不会提交到 git。
-
-### 简略模式（默认）
-排盘汇总表 + 世应 + 空亡月破 + 动爻。适合快速起卦后进入断卦环节。
-
-### 完整模式（--full）
-展示完整的八步推导过程：起卦→定卦→纳甲→六亲→六神→世应→空亡月破→变卦。适合学习和验证。
 
 ## 断卦流程（Agent 使用）
 
