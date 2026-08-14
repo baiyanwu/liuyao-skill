@@ -201,12 +201,12 @@ def get_hexagram_name(y6):
 # ============================================================
 def get_ganzhi_today(dt=None):
     if dt is None: dt = datetime.datetime.now()
-    base = datetime.date(2000, 1, 1)  # 2000-01-01 = 甲辰日
+    base = datetime.date(2000, 1, 1)  # 2000-01-01 = 戊午日
     target = dt.date() if isinstance(dt, datetime.datetime) else dt
     days = (target - base).days
-    # 2000-01-01 甲辰: 天干甲(0), 地支辰(4)
-    tg_idx = (0 + days) % 10
-    dz_idx = (4 + days) % 12
+    # 2000-01-01 戊午: 天干戊(4), 地支午(6)
+    tg_idx = (4 + days) % 10
+    dz_idx = (6 + days) % 12
     return TIANGAN[tg_idx], DIZHI_LIST[dz_idx]
 
 def get_kongwang(ri_tg, ri_dz):
